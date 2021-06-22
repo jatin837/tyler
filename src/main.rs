@@ -1,11 +1,8 @@
 use std::env;
 use std::path::Path;
 use path_abs::PathAbs;
-use tyler::{
-    to_bytes,
-    run_file,
-    run_prompt,
-};
+mod libs;
+use libs::*;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
