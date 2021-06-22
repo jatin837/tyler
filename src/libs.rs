@@ -5,7 +5,7 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::io::BufReader;
 
-pub enum token_type {
+pub enum TokenType {
     // Single-character tokens.
     LEFT_PAREN,
     RIGHT_PAREN,
