@@ -8,3 +8,9 @@ a stack based interpreted programming language
 - first-class functions
 - closure
 - classes and inheritance
+
+### TODO
+
+- [ ] Lexing
+- [ ] Parsing
+
