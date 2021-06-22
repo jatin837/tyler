@@ -59,8 +59,12 @@ pub enum token_type {
 
 
 
-pub fn tokenize(raw: &String) -> Vec<String>{
-    vec!{String::from("ab"), String::from("dev")}
+pub fn tokenize(raw: &String) -> Vec<&str>{
+    /*
+    tokenize based on 
+    */
+    let tokens: Vec<&str> = raw.split(" ").collect();
+    tokens
 }
 
 pub fn run_prompt(){
@@ -86,4 +90,8 @@ pub fn run_file(fpath: &Path) {
     let bytes = to_bytes(&src_code);
     println!("File {:?} \n-----------\n{:?}", fpath, src_code);
     println!("bytes string  {:?} \n-----------\n{:?}", fpath, bytes);
+    let tokens = tokenize(&src_code);
+    for token in tokens{
+        println!("token -> {}", token)
+    }
 }
