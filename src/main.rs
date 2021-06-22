@@ -11,7 +11,7 @@ fn run_prompt(){
     // TOBE implemented
     loop {
         let mut line = String::new();
-        println!("\x1b[0;31mty> \x1b[0m\x1b[1F\x1b[2C");
+        println!("\x1b[0;31mtyli>>\x1b[0m");
         let b1 = std::io::stdin().read_line(&mut line).unwrap();
         println!("no of bytes read , {}", b1);
     }
