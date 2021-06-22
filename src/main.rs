@@ -9,7 +9,12 @@ use std::io::BufReader;
 
 fn run_prompt(){
     // TOBE implemented
-    println!("implement prompt")
+    loop {
+        let mut line = String::new();
+        println!("\x1b[0;31mty> \x1b[0m\x1b[1F\x1b[2C");
+        let b1 = std::io::stdin().read_line(&mut line).unwrap();
+        println!("no of bytes read , {}", b1);
+    }
 }
 
 fn to_bytes(raw_text: &String) -> &[u8] {
