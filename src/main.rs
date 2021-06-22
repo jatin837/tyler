@@ -1,7 +1,9 @@
+use std::env;
 mod libs;
 use libs::*;
 
 fn main() {
-    parse_args();
+    let args: Vec<String> = env::args().collect();
+    parse_args(&args);
 }
 

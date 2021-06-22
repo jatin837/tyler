@@ -55,10 +55,6 @@ pub enum token_type {
     EOF,
 }
 
-//use std::io::Read;
-
-
-
 pub fn tokenize(raw: &String) -> Vec<&str>{
     /*
     tokenize based on 
@@ -96,8 +92,7 @@ pub fn run_file(fpath: &Path) {
     }
 }
 
-pub fn parse_args(){
-    let args: Vec<String> = env::args().collect();
+pub fn parse_args(args: &Vec<String>){
     match args.len() {
         1 => run_prompt(),
         2 => {
