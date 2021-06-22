@@ -95,3 +95,21 @@ pub fn run_file(fpath: &Path) {
         println!("token -> {}", token)
     }
 }
+
+pub fn parse_args(){
+    let args: Vec<String> = env::args().collect();
+    match args.len() {
+        0 => run_prompt(),
+        1 => {
+            let filename: &String = &args[0];
+            let abs_file_path = PathAbs::new(filename).unwrap();
+            let filepath:&Path = Path::new(&abs_file_path);
+            if !filepath.exists() {
+                eprintln!("[ERROR] provide a file that exists")
+            }else {
+                run_file(&filepath)
+            }
+        },
+        _ => eprintln!("[USAGE] tyler <file_name> (for script), tyler (for running prompt)"),
+    }
+}
