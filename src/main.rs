@@ -11,14 +11,20 @@ fn run_prompt(){
     // TOBE implemented
     println!("implement prompt")
 }
+
+fn to_bytes(raw_text: &String) -> &[u8] {
+    raw_text.as_bytes()
+}
+
 fn run_file(fpath: &Path) {
 //reading file first
     let fp = File::open(&fpath).expect("[ERROR] opening file");
     let mut buf_reader = BufReader::new(fp);
-    let mut contents = String::new();
-    buf_reader.read_to_string(&mut contents).expect("can't read file");
-    print!("File {:?} \n-----------\n{:?}", fpath, contents)
-
+    let mut src_code = String::new();
+    buf_reader.read_to_string(&mut src_code).expect("[ERROR] can't read file");
+    let bytes = to_bytes(&src_code);
+    print!("File {:?} \n-----------\n{:?}", fpath, src_code);
+    print!("bytes string  {:?} \n-----------\n{:?}", fpath, bytes);
 }
 
 fn main() {
