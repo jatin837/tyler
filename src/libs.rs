@@ -99,9 +99,9 @@ pub fn run_file(fpath: &Path) {
 pub fn parse_args(){
     let args: Vec<String> = env::args().collect();
     match args.len() {
-        0 => run_prompt(),
-        1 => {
-            let filename: &String = &args[0];
+        1 => run_prompt(),
+        2 => {
+            let filename: &String = &args[1];
             let abs_file_path = PathAbs::new(filename).unwrap();
             let filepath:&Path = Path::new(&abs_file_path);
             if !filepath.exists() {
