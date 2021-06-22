@@ -8,7 +8,7 @@ fn run_prompt(){
     // TOBE implemented
     println!("implement prompt")
 }
-fn run(fpath: &Path) {
+fn run_file(fpath: &Path) {
     // TOBE implemented
     println!("process this file : {:?}", fpath)
 }
@@ -24,10 +24,10 @@ fn main() {
             if !filepath.exists() {
                 eprintln!("[ERROR] provide a file that exists")
             }else {
-                run(&filepath)
+                run_file(&filepath)
             }
         },
-        _ => println!("currently supports only 1 file for parsing and running"),
+        _ => eprintln!("[USAGE] tyler <file_name> (for script), tyler (for running prompt)"),
     }
 }
 
