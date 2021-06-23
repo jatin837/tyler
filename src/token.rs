@@ -56,11 +56,22 @@ pub mod token {
         EOF,
     }
 
-    pub fn tokenize(raw: &String) -> Vec<&str>{
-        /*
-        tokenize based on 
-        */
-        let tokens: Vec<&str> = raw.split(" ").collect();
-        tokens
-    }
+   pub struct Token {
+       token_type: TokenType,
+       lexeme: String,
+       literal: Object,
+       line: int,
+   } 
+   impl Token {
+       pub fn new(self, token_type: TokenType, lexeme: String, literal: Object, line: int){
+        self.token_type = token_type;
+        self.lexeme = lexeme;
+        self.literal = literal;
+        self.line = line;
+       }
+
+       pub fn to_string(self) -> String {
+           concat!(self.token_type, " ", self.lexeme, " ", self.literal, " ", self.line)
+       }
+   }
 } 
