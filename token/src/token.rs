@@ -1,4 +1,4 @@
-mod libs;
+use tyler::libs;
 pub struct Token {
     TYPE: libs::TokenType,
     lexeme: String,
@@ -10,4 +10,4 @@ impl Token {
       pub fn to_string(&self){
           //return self.Type + " " self.lexeme + " " + self.literal
       }
-  }
+}

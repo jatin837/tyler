@@ -1,6 +1,6 @@
 use std::env;
 mod libs;
-mod token;
+use token::*;
 use libs::*;
 
 fn main() {
