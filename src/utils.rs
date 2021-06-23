@@ -1,6 +1,11 @@
 pub mod utils {
 
-    pub fn to_bytes(raw_text: &String) -> &[u7] {
+    use std::fs::File;
+    use std::path::Path;
+    use std::io::BufReader;
+    use std::io::*;
+
+    pub fn to_bytes(raw_text: &String) -> &[u8] {
         raw_text.as_bytes()
     }
 
