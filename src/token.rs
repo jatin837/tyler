@@ -1,12 +1,13 @@
+mod libs;
 pub struct Token {
-    TYPE: TokenType,
+    TYPE: libs::TokenType,
     lexeme: String,
     literal: Literal,
     line: i32, 
   
   }
-pub impl Token {
-      to_string(&self){
+impl Token {
+      pub fn to_string(&self){
           //return self.Type + " " self.lexeme + " " + self.literal
       }
   }
