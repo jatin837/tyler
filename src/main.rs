@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-use std::env;
-mod utils;
-use utils::*;
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    parse_args(&args);
-=======
 use path_abs::PathAbs;
 use std::env;
 use std::fs::File;
@@ -118,5 +110,4 @@ fn main() {
         }
         _ => eprintln!("[USAGE] tyler <file_name> (for script), tyler (for running prompt)"),
     }
->>>>>>> old
 }
