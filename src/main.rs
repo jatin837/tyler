@@ -4,6 +4,8 @@ use std::path::Path;
 //use std::io::Read;
 
 pub mod helper {
+
+    use crate::scanner;
     use std::io::prelude::*;
     use std::fs::File;
     use std::io::BufReader;
@@ -18,8 +20,12 @@ pub mod helper {
         }
     }
 
-    pub fn to_bytes(raw_text: &String) -> &[u8] {
-        raw_text.as_bytes()
+    pub fn to_bytes(raw_text: &String) -> Vec<&u8> {
+        let mut res = Vec::new();
+        for c in raw_text.as_bytes().iter(){
+            res.push(c);
+        }
+        res
     }
 
     pub fn run_file(fpath: &Path) {
@@ -31,22 +37,21 @@ pub mod helper {
             .read_to_string(&mut src_code)
             .expect("[ERROR] can't read file");
         let bytes = to_bytes(&src_code);
-        print!("File {:?} \n-----------\n{:?}", fpath, src_code);
-        print!("bytes string  {:?} \n-----------\n{:?}", fpath, bytes);
+        let scanner = scanner::Scanner::new(bytes);
     }
 }
 
 pub mod scanner {
     use crate::token::Token;
 
-    struct Scanner {
+    pub struct Scanner {
         token_list : Vec<Token>,
         source: Vec<u8>,
         curr_pos: i64,
     }
 
     impl Scanner {
-        fn new(source: Vec<u8>) -> Scanner {
+        pub fn new(source: Vec<&u8>) -> Scanner {
             Scanner {
                 token_list: Vec::new(),
                 source : Vec::new(),
@@ -54,7 +59,7 @@ pub mod scanner {
             }
         }
 
-        fn scan(&mut self) -> () {
+        pub fn scan(&mut self) -> () {
             self.curr_pos += 1;
         }
     }
