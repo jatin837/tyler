@@ -20,11 +20,9 @@ pub mod helper {
         }
     }
 
-    pub fn to_bytes(raw_text: &String) -> Vec<&u8> {
+    pub fn to_bytes(raw_text: &String) -> Vec<u8> {
         let mut res = Vec::new();
-        for c in raw_text.as_bytes().iter(){
-            res.push(c);
-        }
+        res = raw_text.as_bytes().to_vec();
         res
     }
 
@@ -51,7 +49,7 @@ pub mod scanner {
     }
 
     impl Scanner {
-        pub fn new(source: Vec<&u8>) -> Scanner {
+        pub fn new(source: Vec<u8>) -> Scanner {
             Scanner {
                 token_list: Vec::new(),
                 source : Vec::new(),
