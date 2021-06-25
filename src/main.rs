@@ -52,7 +52,7 @@ pub mod scanner {
         pub fn new(source: Vec<u8>) -> Scanner {
             Scanner {
                 token_list: Vec::new(),
-                source : Vec::new(),
+                source : source,
                 curr_pos : 0 as i64,
             }
         }
