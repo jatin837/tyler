@@ -41,6 +41,22 @@ pub mod scanner {
 
     struct Scanner {
         token_list : Vec<Token>,
+        source: Vec<u8>,
+        curr_pos: i64,
+    }
+
+    impl Scanner {
+        fn new(source: Vec<u8>) -> Scanner {
+            Scanner {
+                token_list: Vec::new(),
+                source : Vec::new(),
+                curr_pos : 0 as i64,
+            }
+        }
+
+        fn scan(&mut self) -> () {
+            self.curr_pos += 1;
+        }
     }
 }
 
