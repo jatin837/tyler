@@ -35,8 +35,10 @@ pub mod helper {
             .read_to_string(&mut src_code)
             .expect("[ERROR] can't read file");
         let bytes = to_bytes(&src_code);
-        let scanner = scanner::Scanner::new(bytes);
-        scanner.dump();
+        let mut scanner = scanner::Scanner::new(bytes);
+        loop{
+            scanner.scan();
+        }
     }
 }
 
@@ -46,7 +48,7 @@ pub mod scanner {
     pub struct Scanner {
         token_list : Vec<Token>,
         source: Vec<u8>,
-        curr_pos: i64,
+        curr_pos: usize,
     }
 
     impl Scanner {
@@ -54,19 +56,17 @@ pub mod scanner {
             Scanner {
                 token_list: Vec::new(),
                 source : source,
-                curr_pos : 0 as i64,
+                curr_pos : 0,
             }
         }
 
         pub fn scan(&mut self) -> () {
+            self.dump(self.curr_pos);
             self.curr_pos += 1;
         }
         
-        pub fn dump(self) -> () {
-            for c in self.source {
-                println!("{} => {:?}({:?})",self.curr_pos, c, c as char);
-            }
-
+        pub fn dump(&self, indx: usize) -> () {
+                println!("{:?}", self.source[indx] as char);
         }
     }
 }
