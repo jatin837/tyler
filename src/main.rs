@@ -72,10 +72,57 @@ pub mod scanner {
                         let temp = Token::new(TokenType::LEFT_PAREN, 0, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
+
                     ')' => {
                         let temp = Token::new(TokenType::RIGHT_PAREN, 0, String::from(""), String::from(""));
                         self.token_list.push(temp);
-                    }
+                    },
+
+                    '{' => {
+                        let temp = Token::new(TokenType::LEFT_BRACE, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+
+                    '}' => {
+                        let temp = Token::new(TokenType::RIGHT_BRACE, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    ',' => {
+                        let temp = Token::new(TokenType::COMMA, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    '.' => {
+                        let temp = Token::new(TokenType::DOT, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    '-' => {
+                        let temp = Token::new(TokenType::MINUS, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    '+' => {
+                        let temp = Token::new(TokenType::PLUS, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    ';' => {
+                        let temp = Token::new(TokenType::SEMICOLON, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    '/' => {
+                        let temp = Token::new(TokenType::SLASH, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
+                    '*' => {
+                        let temp = Token::new(TokenType::STAR, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+ 
                     _ => { println!("TO BE IMPLEMENTED");},
                 }
                 self.curr_pos += 1;

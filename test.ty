@@ -1,6 +1,8 @@
-fun add(a, b)
-	c = a + b
-	ret c
+// my first test program
+fun add(a, b){
+	c = a + b;
+	ret c;
+}
 
-res = add(3, 5)
-log(res)
+res = add(3, 5);
+log(res);
