@@ -127,6 +127,7 @@ pub mod scanner {
                 }
                 self.curr_pos += 1;
             }
+            self.token_list.push(Token::new(TokenType::EOF, 0, String::from(""), String::from("")));
             println!("EOF");
         }
         
