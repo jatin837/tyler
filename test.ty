@@ -1,3 +1,3 @@
-f(a, b)
+fun(a, b)
 	c = a + b
 	ret c

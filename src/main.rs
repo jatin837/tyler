@@ -64,7 +64,7 @@ pub mod scanner {
         
         pub fn dump(self) -> () {
             for c in self.source {
-                println!("{} => {:?}",self.curr_pos, c);
+                println!("{} => {:?}({:?})",self.curr_pos, c, c as char);
             }
 
         }
