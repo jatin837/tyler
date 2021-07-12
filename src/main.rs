@@ -53,6 +53,7 @@ pub mod scanner {
         token_list : Vec<Token>,
         source: Vec<u8>,
         curr_pos: usize,
+        line_loc: usize,
     }
 
     impl Scanner {
@@ -61,6 +62,7 @@ pub mod scanner {
                 token_list: Vec::new(),
                 source : source,
                 curr_pos : 0,
+                line_loc : 1,
             }
         }
 
@@ -69,67 +71,71 @@ pub mod scanner {
                 self.dump(self.curr_pos);
                 match self.source[self.curr_pos] as char{
                     '(' => {
-                        let temp = Token::new(TokenType::LEFT_PAREN, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::LEFT_PAREN, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
 
                     ')' => {
-                        let temp = Token::new(TokenType::RIGHT_PAREN, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::RIGHT_PAREN, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
 
                     '{' => {
-                        let temp = Token::new(TokenType::LEFT_BRACE, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::LEFT_BRACE, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
 
                     '}' => {
-                        let temp = Token::new(TokenType::RIGHT_BRACE, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::RIGHT_BRACE, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     ',' => {
-                        let temp = Token::new(TokenType::COMMA, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::COMMA, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     '.' => {
-                        let temp = Token::new(TokenType::DOT, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::DOT, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     '-' => {
-                        let temp = Token::new(TokenType::MINUS, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::MINUS, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     '+' => {
-                        let temp = Token::new(TokenType::PLUS, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::PLUS, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     ';' => {
-                        let temp = Token::new(TokenType::SEMICOLON, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::SEMICOLON, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     '/' => {
-                        let temp = Token::new(TokenType::SLASH, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::SLASH, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
  
                     '*' => {
-                        let temp = Token::new(TokenType::STAR, 0, String::from(""), String::from(""));
+                        let temp = Token::new(TokenType::STAR, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
+                    },
+
+                    '\n' => {
+                        self.line_loc += 1;
                     },
 
                     '!' => {
                         if self.source[self.curr_pos + 1] == '=' as u8{
-                            let temp = Token::new(TokenType::BANG_EQUAL, 0, String::from(""), String::from(""));
+                            let temp = Token::new(TokenType::BANG_EQUAL, self.line_loc, String::from(""), String::from(""));
                             self.token_list.push(temp);
                             self.curr_pos += 1;
                         } else {
-                            let temp = Token::new(TokenType::BANG, 0, String::from(""), String::from(""));
+                            let temp = Token::new(TokenType::BANG, self.line_loc, String::from(""), String::from(""));
                             self.token_list.push(temp);
                         }
                     },
@@ -138,12 +144,12 @@ pub mod scanner {
                 }
                 self.curr_pos += 1;
             }
-            self.token_list.push(Token::new(TokenType::EOF, 0, String::from(""), String::from("")));
+            self.token_list.push(Token::new(TokenType::EOF, self.line_loc, String::from(""), String::from("")));
             println!("EOF");
         }
         
         pub fn dump(&self, indx: usize) -> () {
-            println!("{:?} at {:}", self.source[indx] as char, indx);
+            println!("{:?} at {:}, line = {:?}", self.source[indx] as char, indx, self.line_loc);
         }
     }
 }
