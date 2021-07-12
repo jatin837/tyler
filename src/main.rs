@@ -140,6 +140,39 @@ pub mod scanner {
                         }
                     },
  
+                    '=' => {
+                        if self.source[self.curr_pos + 1] == '=' as u8{
+                            let temp = Token::new(TokenType::EQUAL_EQUAL, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                            self.curr_pos += 1;
+                        } else {
+                            let temp = Token::new(TokenType::EQUAL, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                        }
+                    },
+
+                    '>' => {
+                        if self.source[self.curr_pos + 1] == '=' as u8{
+                            let temp = Token::new(TokenType::GREATER_EQUAL, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                            self.curr_pos += 1;
+                        } else {
+                            let temp = Token::new(TokenType::GREATER, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                        }
+                    },
+
+                    '<' => {
+                        if self.source[self.curr_pos + 1] == '=' as u8{
+                            let temp = Token::new(TokenType::LESS_EQUAL, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                            self.curr_pos += 1;
+                        } else {
+                            let temp = Token::new(TokenType::LESS, self.line_loc, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                        }
+                    },
+
                     _ => { println!("TO BE IMPLEMENTED");},
                 }
                 self.curr_pos += 1;
