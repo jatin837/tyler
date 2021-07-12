@@ -37,6 +37,8 @@ pub mod helper {
         let bytes = to_bytes(&src_code);
         let mut scanner = scanner::Scanner::new(bytes);
         scanner.scan();
+        println!("------------------------------------");
+        println!("{:?}", scanner);
     }
 }
 
