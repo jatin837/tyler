@@ -122,6 +122,17 @@ pub mod scanner {
                         let temp = Token::new(TokenType::STAR, 0, String::from(""), String::from(""));
                         self.token_list.push(temp);
                     },
+
+                    '!' => {
+                        if self.source[self.curr_pos + 1] == '=' as u8{
+                            let temp = Token::new(TokenType::BANG_EQUAL, 0, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                            self.curr_pos += 1;
+                        } else {
+                            let temp = Token::new(TokenType::BANG, 0, String::from(""), String::from(""));
+                            self.token_list.push(temp);
+                        }
+                    },
  
                     _ => { println!("TO BE IMPLEMENTED");},
                 }
