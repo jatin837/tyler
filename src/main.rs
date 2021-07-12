@@ -36,9 +36,7 @@ pub mod helper {
             .expect("[ERROR] can't read file");
         let bytes = to_bytes(&src_code);
         let mut scanner = scanner::Scanner::new(bytes);
-        loop{
-            scanner.scan();
-        }
+        scanner.scan();
     }
 }
 
@@ -61,12 +59,15 @@ pub mod scanner {
         }
 
         pub fn scan(&mut self) -> () {
-            self.dump(self.curr_pos);
-            self.curr_pos += 1;
+            while self.curr_pos < self.source.len(){
+                self.dump(self.curr_pos);
+                self.curr_pos += 1;
+            }
+            println!("EOF");
         }
         
         pub fn dump(&self, indx: usize) -> () {
-                println!("{:?}", self.source[indx] as char);
+            println!("{:?} at {:}", self.source[indx] as char, indx);
         }
     }
 }
