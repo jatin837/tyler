@@ -41,8 +41,12 @@ pub mod helper {
 }
 
 pub mod scanner {
-    use crate::token::Token;
+    use crate::token::{
+        Token,
+        TokenType,
+    };
 
+    #[derive(Debug)]
     pub struct Scanner {
         token_list : Vec<Token>,
         source: Vec<u8>,
@@ -61,6 +65,17 @@ pub mod scanner {
         pub fn scan(&mut self) -> () {
             while self.curr_pos < self.source.len(){
                 self.dump(self.curr_pos);
+                match self.source[self.curr_pos] as char{
+                    '(' => {
+                        let temp = Token::new(TokenType::LEFT_PAREN, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    },
+                    ')' => {
+                        let temp = Token::new(TokenType::RIGHT_PAREN, 0, String::from(""), String::from(""));
+                        self.token_list.push(temp);
+                    }
+                    _ => { println!("TO BE IMPLEMENTED");},
+                }
                 self.curr_pos += 1;
             }
             println!("EOF");
@@ -73,6 +88,7 @@ pub mod scanner {
 }
 
 pub mod token {
+    #[derive(Debug)]
     pub enum TokenType {
         LEFT_PAREN,
         RIGHT_PAREN,
@@ -121,11 +137,23 @@ pub mod token {
 
         EOF,
     }  
+    #[derive(Debug)]
     pub struct Token {
         Type: TokenType,
-        line: i64,
+        line: usize,
         literal: String,
         lexeme: String,
+    }
+    
+    impl Token {
+        pub fn new(Type: TokenType, line: usize, literal: String, lexeme: String) -> Token {
+            Token {
+                Type: Type,
+                line: line,
+                literal: literal,
+                lexeme: lexeme,
+            }
+        }
     }
 }
 
