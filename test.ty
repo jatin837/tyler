@@ -1,3 +1,6 @@
-fun(a, b)
+fun add(a, b)
 	c = a + b
 	ret c
+
+res = add(3, 5)
+log(res)
