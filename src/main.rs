@@ -69,7 +69,8 @@ pub mod scanner {
         pub fn scan(&mut self) -> () {
             while self.curr_pos < self.source.len(){
                 self.dump(self.curr_pos);
-                match self.source[self.curr_pos] as char{
+                let a: &u8 = &self.source[self.curr_pos];
+                match *a as char{
                     '(' => {
                         let temp = Token::new(TokenType::LEFT_PAREN, self.line_loc, String::from(""), String::from(""));
                         self.token_list.push(temp);
