@@ -51,8 +51,10 @@ pub mod scanner {
     #[derive(Debug)]
     pub struct Scanner {
         token_list : Vec<Token>,
+        buff : Vec<u8>,
         source: Vec<u8>,
         curr_pos: usize,
+        start_pos: usize,
         line_loc: usize,
     }
 
@@ -60,16 +62,24 @@ pub mod scanner {
         pub fn new(source: Vec<u8>) -> Scanner {
             Scanner {
                 token_list: Vec::new(),
+                buff: Vec::new(),
                 source : source,
                 curr_pos : 0,
+                start_pos : 0,
                 line_loc : 1,
             }
+        }
+
+        pub fn add_token(&mut self, Type: TokenType) -> (){
+            let temp = Token::new(Type,  self.line_loc, String::from(""), String::from(""));
+            self.token_list.push(temp);
         }
 
         pub fn scan(&mut self) -> () {
             while self.curr_pos < self.source.len(){
                 self.dump(self.curr_pos);
                 let a: &u8 = &self.source[self.curr_pos];
+                let buff: Vec<&u8> = Vec::new();
                 match *a as char{
                     '(' => {
                         let temp = Token::new(TokenType::LEFT_PAREN, self.line_loc, String::from(""), String::from(""));
