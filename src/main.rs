@@ -78,6 +78,29 @@ pub mod scanner {
         }
 
         pub fn get_tok(&mut self) -> Token {
+
+            // if current pos is any of the these
+            // ======================================
+            //                ' '
+            //                '('
+            //                ')'
+            //                '{'
+            //                '}'
+            //                ','
+            //                '.'
+            //                '-'
+            //                '+'
+            //                ';'
+            //                '/'
+            //
+            //  =====================================
+            //  and scanner buff is empty, then return Token
+            //
+            //  else, if scanner buff is not empty, then, return scanner buff as a string token and
+            //  clear the scanner buff 
+            //
+            //  else token = get_tok(self.curr_pos+=1)
+
             let token_type: HashMap<char, Token> = {}
             match *a as char{
                 ' ' | '\t'  => { if buff.len() == 0 }
