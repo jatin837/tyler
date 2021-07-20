@@ -3,6 +3,8 @@ use std::env;
 use std::path::Path;
 use std::collections::HashMap;
 
+#[macro_use] extern crate maplit;
+
 //use std::io::Read;
 
 pub mod helper {
@@ -103,49 +105,25 @@ pub mod scanner {
 
             let a = &self.source[self.curr_pos];
 
-            //
-            // single_lexeme = {
-            //    '(' : Token::new()    
-            //    ')' : Token::new() 
-            //    '{' : Token::new()
-            //    '}' : Token::new()
-            //    ',' : Token::new()
-            //    '.' : Token::new()
-            //    '-' : Token::new()
-            //    '+' : Token::new()
-            //    ';' : Token::new()
-            //    '/' : Token::new()
-            //    '*' : Token::new()
-            //    '!' : Token::new()
-            //    '=' : Token::new()
-            //    '>' : Token::new()
-            //    '<' : Token::new()
-            // }
-            match *a as char{
-                ' ' | '\t' | '\n'   => { if buff.len() == 0 }
-                '('                 => { },
-                ')'                 => { },
-                '{'                 => { },
-                '}'                 => { },
-                ','                 => { },
-                '.'                 => { },
-                '-'                 => { },
-                '+'                 => { },
-                ';'                 => { },
-                '/'                 => { },
-                '*'                 => { },
-                '!'                 => { },
-                '='                 => { },
-                '>'                 => { },
-                '<'                 => { },
-                 _                  => 
+            let single_lexeme = hashmap!{
+               '(' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               ')' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '{' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '}' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               ',' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '.' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '-' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '+' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               ';' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '/' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '*' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '!' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '=' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '>' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+               '<' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+            };
 
-                 {
-
-                     let tok = get_tok();
-                 },
-            }
-            return tok
+            return tok;
         }
 
         pub fn scan(&mut self) -> () {
