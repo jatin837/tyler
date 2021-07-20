@@ -102,6 +102,25 @@ pub mod scanner {
             //  else token = get_tok(self.curr_pos+=1)
 
             let a = &self.source[self.curr_pos];
+
+            //
+            // single_lexeme = {
+            //    '(' : Token::new()    
+            //    ')' : Token::new() 
+            //    '{' : Token::new()
+            //    '}' : Token::new()
+            //    ',' : Token::new()
+            //    '.' : Token::new()
+            //    '-' : Token::new()
+            //    '+' : Token::new()
+            //    ';' : Token::new()
+            //    '/' : Token::new()
+            //    '*' : Token::new()
+            //    '!' : Token::new()
+            //    '=' : Token::new()
+            //    '>' : Token::new()
+            //    '<' : Token::new()
+            // }
             match *a as char{
                 ' ' | '\t' | '\n'   => { if buff.len() == 0 }
                 '('                 => { },
