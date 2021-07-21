@@ -105,21 +105,21 @@ pub mod scanner {
             //  else token = get_tok(self.curr_pos+=1)
             //
             let single_char_token = hashmap!{
-              '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"", ""),
-              '{'     =>     Token::new(TokenType::LEFT_BRACE, self.line_loc,"", ""),
-              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,"", ""),
-              ','     =>     Token::new(TokenType::COMMA, self.line_loc,"", ""),
-              '.'     =>     Token::new(TokenType::DOT, self.line_loc,"", ""),
-              '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"", ""),
-              '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"", ""),
-              ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"", ""),
-              '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"", ""),
-              '*'     =>     Token::new(TokenType::STAR, self.line_loc,"", ""),
-              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"", ""),
-              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"", ""),
-              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"", ""),
-              '<'     =>     Token::new(TokenType::LESS, self.line_loc,"", ""),
+              '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"".to_string(), "".to_string()),
+              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"".to_string(), "".to_string()),
+              '{'     =>     Token::new(TokenType::LEFT_BRACE, self.line_loc,"".to_string(), "".to_string()),
+              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,"".to_string(), "".to_string()),
+              ','     =>     Token::new(TokenType::COMMA, self.line_loc,"".to_string(), "".to_string()),
+              '.'     =>     Token::new(TokenType::DOT, self.line_loc,"".to_string(), "".to_string()),
+              '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"".to_string(), "".to_string()),
+              '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"".to_string(), "".to_string()),
+              ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"".to_string(), "".to_string()),
+              '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"".to_string(), "".to_string()),
+              '*'     =>     Token::new(TokenType::STAR, self.line_loc,"".to_string(), "".to_string()),
+              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"".to_string(), "".to_string()),
+              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"".to_string(), "".to_string()),
+              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"".to_string(), "".to_string()),
+              '<'     =>     Token::new(TokenType::LESS, self.line_loc,"".to_string(), "".to_string()),
             };
 
 //============TODO====================================================================
@@ -133,27 +133,28 @@ pub mod scanner {
 //              '>='    =>     Token::new(TokenType::GREATER_EQUAL, self.line_loc,"", ""),
 //              '<+'    =>     Token::new(TokenType::LESS_EQUAL, self.line_loc,"", ""),
 
-            let a = &self.source[self.curr_pos] as char;
-            if single_lexeme.contains_key(*a){
+            let a = self.source[self.curr_pos] as char;
+            if single_char_token.contains_key(&a){
                 if self.buff.len() > 0 {
-                    let ret = str::from_utf8(&self.buff.copy()).unwrap();
+                    let ret = str::from_utf8(&self.buff).unwrap();
                     self.buff.clear();
-                    ret
+                    return ret;
                 }
                 else {
                     self.curr_pos += 1;
-                    single_char_token[*a]
+                    return single_char_token[&a];
                 }
             }
 
-            match *a {
+            match a {
                 ' ' | '\t' => {
                     // ==============TODO==========================
                     // if buff is empty, then ignore it(increase self.current)
                     // else return buff as string token
                     if self.buff.len() == 0 {
                         self.curr_pos += 1;
-                        tok = self.get_token();
+                        let tok = self.get_tok();
+                        return tok;
                     }
                 }
                 '\n' => {
@@ -164,7 +165,7 @@ pub mod scanner {
 
                 _ => {
                    self.curr_pos += 1;
-                   tok = self.get_token();
+                   let tok = self.get_tok();
                 }
             }
 
