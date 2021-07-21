@@ -177,8 +177,6 @@ pub mod scanner {
         }
 
         pub fn scan(&mut self) -> () {
-            // get token
-            // add token to token list
             let tok = self.get_tok();
             self.add_tok(tok);
         }
