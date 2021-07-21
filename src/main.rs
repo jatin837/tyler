@@ -83,28 +83,7 @@ pub mod scanner {
             if self.curr_pos > self.source.len(){
                 return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string())
             }
-            // if current pos is any of the these
-            // ======================================
-            //                ' '
-            //                '('
-            //                ')'
-            //                '{'
-            //                '}'
-            //                ','
-            //                '.'
-            //                '-'
-            //                '+'
-            //                ';'
-            //                '/'
-            //
-            //  =====================================
-            //  and scanner buff is empty, then return Token
-            //
-            //  else, if scanner buff is not empty, then, return scanner buff as a string token and
-            //  clear the scanner buff 
-            //
-            //  else token = get_tok(self.curr_pos+=1)
-            //
+
             let single_char_token = hashmap!{
               '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"".to_string(), "".to_string()),
               ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"".to_string(), "".to_string()),
@@ -177,8 +156,13 @@ pub mod scanner {
         }
 
         pub fn scan(&mut self) -> () {
-            let tok = self.get_tok();
-            self.add_tok(tok);
+            loop {
+                let tok = self.get_tok();
+                match tok.Type {
+                    TokenType::EOF => {self.add_tok(tok);break;},
+                    _ => {self.add_tok(tok);},
+                }
+            }
         }
         
         pub fn dump(&self, indx: usize) -> () {
@@ -239,7 +223,7 @@ pub mod token {
     }  
     #[derive(Debug)]
     pub struct Token {
-        Type: TokenType,
+        pub Type: TokenType,
         line: usize,
         literal: String,
         lexeme: String,
