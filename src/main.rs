@@ -1,6 +1,7 @@
 use path_abs::PathAbs;
 use std::env;
 use std::path::Path;
+use std::str;
 use std::collections::HashMap;
 
 #[macro_use] extern crate maplit;
@@ -102,26 +103,70 @@ pub mod scanner {
             //  clear the scanner buff 
             //
             //  else token = get_tok(self.curr_pos+=1)
-
-            let a = &self.source[self.curr_pos];
-
-            let single_lexeme = hashmap!{
-               '(' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               ')' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '{' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '}' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               ',' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '.' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '-' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '+' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               ';' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '/' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '*' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '!' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '=' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '>' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
-               '<' => Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+            //
+            let single_char_token = hashmap!{
+              '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"", ""),
+              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"", ""),
+              '{'     =>     Token::new(TokenType::LEFT_BRACE, self.line_loc,"", ""),
+              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,"", ""),
+              ','     =>     Token::new(TokenType::COMMA, self.line_loc,"", ""),
+              '.'     =>     Token::new(TokenType::DOT, self.line_loc,"", ""),
+              '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"", ""),
+              '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"", ""),
+              ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"", ""),
+              '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"", ""),
+              '*'     =>     Token::new(TokenType::STAR, self.line_loc,"", ""),
+              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"", ""),
+              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"", ""),
+              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"", ""),
+              '<'     =>     Token::new(TokenType::LESS, self.line_loc,"", ""),
             };
+
+//============TODO====================================================================
+//write logic to handle such situation where potential two character token is possible
+//
+//              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"", ""),
+//              '!='    =>     Token::new(TokenType::BANG_EQUAL, self.line_loc,"", ""),
+//              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"", ""),
+//              '=='    =>     Token::new(TokenType::EQUAL_EQUAL, self.line_loc,"", ""),
+//              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"", ""),
+//              '>='    =>     Token::new(TokenType::GREATER_EQUAL, self.line_loc,"", ""),
+//              '<+'    =>     Token::new(TokenType::LESS_EQUAL, self.line_loc,"", ""),
+
+            let a = &self.source[self.curr_pos] as char;
+            if single_lexeme.contains_key(*a){
+                if self.buff.len() > 0 {
+                    let ret = str::from_utf8(&self.buff.copy()).unwrap();
+                    self.buff.clear();
+                    ret
+                }
+                else {
+                    self.curr_pos += 1;
+                    single_char_token[*a]
+                }
+            }
+
+            match *a {
+                ' ' | '\t' => {
+                    // ==============TODO==========================
+                    // if buff is empty, then ignore it(increase self.current)
+                    // else return buff as string token
+                    if self.buff.len() == 0 {
+                        self.curr_pos += 1;
+                        tok = self.get_token();
+                    }
+                }
+                '\n' => {
+                    // ==============TODO==========================
+                    // if buff is empty, then ignore it(increase self.current)
+                    // else return buff as string token and increament line_loc by one
+                }
+
+                _ => {
+                   self.curr_pos += 1;
+                   tok = self.get_token();
+                }
+            }
 
             return tok;
         }
@@ -132,8 +177,8 @@ pub mod scanner {
             while self.curr_pos < self.source.len(){
                 let tok = self.get_tok();
                 self.add_tok(tok);
-                println!("EOF");
             }
+            println!("EOF");
             self.token_list.push(Token::new(TokenType::EOF, self.line_loc, String::from(""), String::from("")));
         }
         
