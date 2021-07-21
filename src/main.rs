@@ -75,13 +75,14 @@ pub mod scanner {
             }
         }
 
-        pub fn add_token(&mut self, Type: TokenType) -> (){
-            let temp = Token::new(Type,  self.line_loc, String::from(""), String::from(""));
-            self.token_list.push(temp);
+        pub fn add_tok(&mut self, T: Token) -> (){
+            self.token_list.push(T);
         }
 
         pub fn get_tok(&mut self) -> Token {
-
+            if self.curr_pos > self.source.len(){
+                return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string())
+            }
             // if current pos is any of the these
             // ======================================
             //                ' '
@@ -134,61 +135,58 @@ pub mod scanner {
 //              '<+'    =>     Token::new(TokenType::LESS_EQUAL, self.line_loc,"", ""),
 
             let a = self.source[self.curr_pos] as char;
-            if single_char_token.contains_key(&a){
-                if self.buff.len() > 0 {
-                    let ret = str::from_utf8(&self.buff).unwrap();
-                    self.buff.clear();
-                    return ret;
-                }
-                else {
-                    self.curr_pos += 1;
-                    return single_char_token[&a];
-                }
-            }
+//           if single_char_token.contains_key(&a){
+//               if self.buff.len() > 0 {
+//                   let ret = str::from_utf8(&self.buff).unwrap();
+//                   self.buff.clear();
+//                   return ret;
+//               }
+//               else {
+//                   self.curr_pos += 1;
+//                   return single_char_token[&a];
+//               }
+//           }
 
             match a {
                 ' ' | '\t' => {
-                    // ==============TODO==========================
-                    // if buff is empty, then ignore it(increase self.current)
-                    // else return buff as string token
                     if self.buff.len() == 0 {
                         self.curr_pos += 1;
                         let tok = self.get_tok();
                         return tok;
                     }
+                    else {
+                        let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
+                        self.buff.clear();
+                        return tok;
+                    }
                 }
                 '\n' => {
-                    // ==============TODO==========================
-                    // if buff is empty, then ignore it(increase self.current)
-                    // else return buff as string token and increament line_loc by one
+                    self.curr_pos += 1;
+                    self.line_loc += 1;
+                    let tok = self.get_tok();
+                    return tok;
                 }
 
                 _ => {
                    self.curr_pos += 1;
+                   self.buff.push(a as u8);
                    let tok = self.get_tok();
+                   return tok;
                 }
             }
-
-            return tok;
         }
 
         pub fn scan(&mut self) -> () {
             // get token
             // add token to token list
-            while self.curr_pos < self.source.len(){
-                let tok = self.get_tok();
-                self.add_tok(tok);
-            }
-            println!("EOF");
-            self.token_list.push(Token::new(TokenType::EOF, self.line_loc, String::from(""), String::from("")));
+            let tok = self.get_tok();
+            self.add_tok(tok);
         }
         
         pub fn dump(&self, indx: usize) -> () {
             println!("{:?} at {:}, line = {:?}", self.source[indx] as char, indx, self.line_loc);
         }
-          
     }
-
 }
 
 pub mod token {
