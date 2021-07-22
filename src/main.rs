@@ -79,6 +79,17 @@ pub mod scanner {
             self.token_list.push(T);
         }
 
+        pub fn incr_curr_pos(&mut self) -> () {
+            self.curr_pos += 1;
+        }
+
+        pub fn get_tok_from_buf(&mut self) -> Token {
+            let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
+            self.buff.clear();
+            return tok;
+        }
+
+
         pub fn get_tok(&mut self) -> Token {
             if self.curr_pos >= self.source.len() - 1 {
                 if self.buff.len() == 0{
@@ -127,12 +138,11 @@ pub mod scanner {
             let a = self.source[self.curr_pos] as char;
             if single_char_token.contains_key(&a){
                if self.buff.len() > 0 {
-                    let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
-                    self.buff.clear();
-                    return tok;
+                   let tok = self.get_tok_from_buf();
+                   return tok;
                }
                else {
-                   self.curr_pos += 1;
+                   self.incr_curr_pos();
                    let tok = single_char_token[&a].clone();
                    return tok;
                }
@@ -140,27 +150,26 @@ pub mod scanner {
 
             match a {
                 ' ' | '\t' => {
-                    if self.buff.len() == 0 {
-                        self.curr_pos += 1;
-                        let tok = self.get_tok();
-                        return tok;
+                        if self.buff.len() == 0 {
+                       self.incr_curr_pos();
+                       let tok = self.get_tok();
+                       return tok;
                     }
                     else {
-                        let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
-                        self.buff.clear();
-                        self.curr_pos += 1;
-                        return tok;
+                       let tok = self.get_tok_from_buf();
+                       self.incr_curr_pos();
+                       return tok;
                     }
                 }
                 '\n' => {
-                    self.curr_pos += 1;
+                    self.incr_curr_pos();
                     self.line_loc += 1;
                     let tok = self.get_tok();
                     return tok;
                 }
 
                 _ => {
-                   self.curr_pos += 1;
+                   self.incr_curr_pos();
                    self.buff.push(a as u8);
                    let tok = self.get_tok();
                    return tok;
