@@ -80,8 +80,16 @@ pub mod scanner {
         }
 
         pub fn get_tok(&mut self) -> Token {
-            if self.curr_pos > self.source.len(){
-                return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string())
+            if self.curr_pos >= self.source.len() - 1 {
+                if self.buff.len() == 0{
+                    return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string());
+                }
+                else { 
+                    let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
+                    self.buff.clear();
+                    return tok;
+                }
+               
             }
 
             let single_char_token = hashmap!{
