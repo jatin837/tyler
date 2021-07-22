@@ -103,7 +103,7 @@ pub mod scanner {
                
             }
 
-            let single_char_token = hashmap!{
+            let single_char_tok = hashmap!{
               '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"".to_string(), "".to_string()),
               ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"".to_string(), "".to_string()),
               '{'     =>     Token::new(TokenType::LEFT_BRACE, self.line_loc,"".to_string(), "".to_string()),
@@ -113,40 +113,78 @@ pub mod scanner {
               '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"".to_string(), "".to_string()),
               '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"".to_string(), "".to_string()),
               ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"".to_string(), "".to_string()),
-            };
-
-            let potential_double_char_token = hashmap!{
               '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"".to_string(), "".to_string()),
               '*'     =>     Token::new(TokenType::STAR, self.line_loc,"".to_string(), "".to_string()),
+            };
+
+            let potential_double_char_tok = hashmap!{
               '!'     =>     Token::new(TokenType::BANG, self.line_loc,"".to_string(), "".to_string()),
               '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"".to_string(), "".to_string()),
               '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"".to_string(), "".to_string()),
               '<'     =>     Token::new(TokenType::LESS, self.line_loc,"".to_string(), "".to_string()),
             };
 
-//============TODO====================================================================
-//write logic to handle such situation where potential two character token is possible
-//
-//              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"", ""),
-//              '!='    =>     Token::new(TokenType::BANG_EQUAL, self.line_loc,"", ""),
-//              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"", ""),
-//              '=='    =>     Token::new(TokenType::EQUAL_EQUAL, self.line_loc,"", ""),
-//              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"", ""),
-//              '>='    =>     Token::new(TokenType::GREATER_EQUAL, self.line_loc,"", ""),
-//              '<+'    =>     Token::new(TokenType::LESS_EQUAL, self.line_loc,"", ""),
-
             let a = self.source[self.curr_pos] as char;
-            if single_char_token.contains_key(&a){
+            if single_char_tok.contains_key(&a){
                if self.buff.len() > 0 {
                    let tok = self.get_tok_from_buf();
                    return tok;
                }
                else {
                    self.incr_curr_pos();
-                   let tok = single_char_token[&a].clone();
+                   let tok = single_char_tok[&a].clone();
                    return tok;
                }
            }
+
+            if potential_double_char_tok.contains_key(&a){
+                match a {
+                    '!'    =>    {
+                        self.incr_curr_pos();
+                        if self.source[self.curr_pos] == '=' as u8 {
+                            self.incr_curr_pos();
+                            return Token::new(TokenType::BANG_EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                        else {
+                            return Token::new(TokenType::BANG, self.line_loc, "".to_string(), "".to_string());
+                        }
+                    }, 
+
+                    '>'    =>    {
+                        self.incr_curr_pos();
+                        if self.source[self.curr_pos] == '=' as u8 {
+                            self.incr_curr_pos();
+                            return Token::new(TokenType::GREATER_EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                        else {
+                            return Token::new(TokenType::EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                    }, 
+                    '<'    =>     {
+                        self.incr_curr_pos();
+                        if self.source[self.curr_pos] == '=' as u8 {
+                            self.incr_curr_pos();
+                            return Token::new(TokenType::LESS_EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                        else {
+                            return Token::new(TokenType::EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                    }, 
+                    
+                    '='    =>     {
+                        self.incr_curr_pos();
+                        if self.source[self.curr_pos] == '=' as u8 {
+                            self.incr_curr_pos();
+                            return Token::new(TokenType::EQUAL_EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                        else {
+                            return Token::new(TokenType::EQUAL, self.line_loc, "".to_string(), "".to_string());
+                        }
+                    },
+                    
+                    _    =>    {},
+                }
+            }
 
             match a {
                 ' ' | '\t' => {

@@ -3,5 +3,14 @@ fun add(a, b){
 	ret c;
 }
 
+fun is_eq(a, b){
+	if a != b {
+		log("not equal");
+	}
+	else {
+		log("equal");
+	}
+}
+
 var res = add(4, 5);
 log(res);
