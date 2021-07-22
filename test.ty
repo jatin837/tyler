@@ -3,5 +3,5 @@ fun add(a, b){
 	ret c;
 }
 
-res = add(3, 5);
+var res = add(4, 5);
 log(res);

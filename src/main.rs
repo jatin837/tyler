@@ -102,6 +102,9 @@ pub mod scanner {
               '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"".to_string(), "".to_string()),
               '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"".to_string(), "".to_string()),
               ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"".to_string(), "".to_string()),
+            };
+
+            let potential_double_char_token = hashmap!{
               '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"".to_string(), "".to_string()),
               '*'     =>     Token::new(TokenType::STAR, self.line_loc,"".to_string(), "".to_string()),
               '!'     =>     Token::new(TokenType::BANG, self.line_loc,"".to_string(), "".to_string()),
@@ -122,17 +125,18 @@ pub mod scanner {
 //              '<+'    =>     Token::new(TokenType::LESS_EQUAL, self.line_loc,"", ""),
 
             let a = self.source[self.curr_pos] as char;
-//           if single_char_token.contains_key(&a){
-//               if self.buff.len() > 0 {
-//                   let ret = str::from_utf8(&self.buff).unwrap();
-//                   self.buff.clear();
-//                   return ret;
-//               }
-//               else {
-//                   self.curr_pos += 1;
-//                   return single_char_token[&a];
-//               }
-//           }
+            if single_char_token.contains_key(&a){
+               if self.buff.len() > 0 {
+                    let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
+                    self.buff.clear();
+                    return tok;
+               }
+               else {
+                   self.curr_pos += 1;
+                   let tok = single_char_token[&a].clone();
+                   return tok;
+               }
+           }
 
             match a {
                 ' ' | '\t' => {
@@ -144,6 +148,7 @@ pub mod scanner {
                     else {
                         let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
                         self.buff.clear();
+                        self.curr_pos += 1;
                         return tok;
                     }
                 }
@@ -180,7 +185,7 @@ pub mod scanner {
 }
 
 pub mod token {
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub enum TokenType {
         LEFT_PAREN,
         RIGHT_PAREN,
@@ -229,7 +234,7 @@ pub mod token {
 
         EOF,
     }  
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Token {
         pub Type: TokenType,
         line: usize,
