@@ -1,8 +1,12 @@
+#![allow(dead_code)]
+#![allow(missing_copy_implementations)]
+#![allow(missing_docs)]
+#![allow(non_camel_case_types)]
+
+
 use path_abs::PathAbs;
 use std::env;
 use std::path::Path;
-use std::str;
-use std::collections::HashMap;
 
 #[macro_use] extern crate maplit;
 
