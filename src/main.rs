@@ -10,8 +10,6 @@ use std::path::Path;
 
 #[macro_use] extern crate maplit;
 
-//use std::io::Read;
-
 pub mod helper {
 
     use crate::scanner;
@@ -30,9 +28,7 @@ pub mod helper {
     }
 
     pub fn to_bytes(raw_text: &String) -> Vec<u8> {
-        let mut res = Vec::new();
-        res = raw_text.as_bytes().to_vec();
-        res
+        raw_text.as_bytes().to_vec()
     }
 
     pub fn run_file(fpath: &Path) {
@@ -52,6 +48,7 @@ pub mod helper {
 }
 
 pub mod scanner {
+    use std::collections::HashMap;
     use crate::token::{
         Token,
         TokenType,
@@ -59,12 +56,15 @@ pub mod scanner {
 
     #[derive(Debug)]
     pub struct Scanner {
-        token_list : Vec<Token>,
-        buff : Vec<u8>,
-        source: Vec<u8>,
-        curr_pos: usize,
-        start_pos: usize,
-        line_loc: usize,
+        token_list                 :   Vec<Token>,
+        buff                       :   Vec<u8>,
+        source                     :   Vec<u8>,
+        curr_pos                   :   usize,
+        start_pos                  :   usize,
+        line_loc                   :   usize,
+        single_char_type_tok       :   HashMap<char, TokenType>,
+        potential_double_char_tok  :   HashMap<char, TokenType>,
+        reserved_type_tok          :   HashMap<String, TokenType>,
     }
 
     impl Scanner {
@@ -76,6 +76,44 @@ pub mod scanner {
                 curr_pos : 0,
                 start_pos : 0,
                 line_loc : 1,
+                reserved_type_tok : hashmap!{
+                    "or"   .to_string()  =>  TokenType::OR,
+                    "and"  .to_string()  =>  TokenType::AND,
+                    "class".to_string()  =>  TokenType::CLASS,
+                    "else" .to_string()  =>  TokenType::ELSE,
+                    "false".to_string()  =>  TokenType::FALSE,
+                    "fun"  .to_string()  =>  TokenType::FUN,
+                    "for"  .to_string()  =>  TokenType::FOR,
+                    "if"   .to_string()  =>  TokenType::IF,
+                    "nil"  .to_string()  =>  TokenType::NIL,
+                    "or"   .to_string()  =>  TokenType::OR,
+                    "print".to_string()  =>  TokenType::PRINT,
+                    "ret"  .to_string()  =>  TokenType::RETURN,
+                    "super".to_string()  =>  TokenType::SUPER,
+                    "this" .to_string()  =>  TokenType::THIS,
+                    "true" .to_string()  =>  TokenType::TRUE,
+                    "var"  .to_string()  =>  TokenType::VAR,
+                    "while".to_string()  =>  TokenType::WHILE,
+                },
+                single_char_type_tok: hashmap!{
+                      '('     =>     TokenType::LEFT_PAREN,  
+                      ')'     =>     TokenType::RIGHT_PAREN, 
+                      '{'     =>     TokenType::LEFT_BRACE,  
+                      '}'     =>     TokenType::RIGHT_BRACE, 
+                      ','     =>     TokenType::COMMA,       
+                      '.'     =>     TokenType::DOT,         
+                      '-'     =>     TokenType::MINUS,       
+                      '+'     =>     TokenType::PLUS,        
+                      ';'     =>     TokenType::SEMICOLON,   
+                      '/'     =>     TokenType::SLASH,       
+                      '*'     =>     TokenType::STAR,        
+                },
+                potential_double_char_tok: hashmap!{
+                      '!'     =>     TokenType::BANG,    
+                      '='     =>     TokenType::EQUAL,   
+                      '>'     =>     TokenType::GREATER, 
+                      '<'     =>     TokenType::LESS,    
+                },
             }
         }
 
