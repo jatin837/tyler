@@ -87,24 +87,56 @@ pub mod scanner {
             self.curr_pos += 1;
         }
 
-        pub fn get_tok_from_buf(&mut self) -> Token {
+        fn is_at_end(&self) -> bool {
+            self.curr_pos >= self.source.len() - 1
+        }
+
+        fn is_buff_empty(&self) -> bool {
+            self.buff.len() == 0
+        }
+
+        pub fn get_tok_from_buff(&mut self) -> Token {
+            let temp = String::from_utf8(self.buff.clone()).unwrap();
+            
+            let reserved_type = hashmap!{
+                "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
+                "and"   =>     Token::new(TokenType::AND,       self.line_loc,     "".to_string(),     "".to_string()),
+                "class" =>     Token::new(TokenType::CLASS,     self.line_loc,     "".to_string(),     "".to_string()),
+                "else"  =>     Token::new(TokenType::ELSE,      self.line_loc,     "".to_string(),     "".to_string()),
+                "false" =>     Token::new(TokenType::FALSE,     self.line_loc,     "".to_string(),     "".to_string()),
+                "fun"   =>     Token::new(TokenType::FUN,       self.line_loc,     "".to_string(),     "".to_string()),
+                "for"   =>     Token::new(TokenType::FOR,       self.line_loc,     "".to_string(),     "".to_string()),
+                "if"    =>     Token::new(TokenType::IF,        self.line_loc,     "".to_string(),     "".to_string()),
+                "nil"   =>     Token::new(TokenType::NIL,       self.line_loc,     "".to_string(),     "".to_string()),
+                "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
+                "print" =>     Token::new(TokenType::PRINT,     self.line_loc,     "".to_string(),     "".to_string()),
+                "ret"   =>     Token::new(TokenType::RETURN,    self.line_loc,     "".to_string(),     "".to_string()),
+                "super" =>     Token::new(TokenType::SUPER,     self.line_loc,     "".to_string(),     "".to_string()),
+                "this"  =>     Token::new(TokenType::THIS,      self.line_loc,     "".to_string(),     "".to_string()),
+                "true"  =>     Token::new(TokenType::TRUE,      self.line_loc,     "".to_string(),     "".to_string()),
+                "var"   =>     Token::new(TokenType::VAR,       self.line_loc,     "".to_string(),     "".to_string()),
+                "while" =>     Token::new(TokenType::WHILE,     self.line_loc,     "".to_string(),     "".to_string()),
+            };
             let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
             self.buff.clear();
-            return tok;
+            tok
         }
 
 
         pub fn get_tok(&mut self) -> Token {
-            if self.curr_pos >= self.source.len() - 1 {
-                if self.buff.len() == 0{
+            // if scanner is at EOF
+            //
+            if self.is_at_end() {
+                // if buffer is empty => scanner reached the end
+                //
+                if self.is_buff_empty(){
                     return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string());
                 }
+                // else => return whatever in the buffer
+                //
                 else { 
-                    let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
-                    self.buff.clear();
-                    return tok;
+                    return self.get_tok_from_buff();
                 }
-               
             }
 
             let single_char_tok = hashmap!{
@@ -131,7 +163,7 @@ pub mod scanner {
             let a = self.source[self.curr_pos] as char;
             if single_char_tok.contains_key(&a){
                if self.buff.len() > 0 {
-                   let tok = self.get_tok_from_buf();
+                   let tok = self.get_tok_from_buff();
                    return tok;
                }
                else {
@@ -139,7 +171,7 @@ pub mod scanner {
                    let tok = single_char_tok[&a].clone();
                    return tok;
                }
-           }
+            }
 
             if potential_double_char_tok.contains_key(&a){
                 match a {
@@ -192,29 +224,25 @@ pub mod scanner {
 
             match a {
                 ' ' | '\t' => {
-                        if self.buff.len() == 0 {
-                       self.incr_curr_pos();
-                       let tok = self.get_tok();
-                       return tok;
+                       if self.buff.len() == 0 {
+                           self.incr_curr_pos();
+                           return self.get_tok();
                     }
                     else {
-                       let tok = self.get_tok_from_buf();
                        self.incr_curr_pos();
-                       return tok;
+                       return self.get_tok_from_buff();
                     }
                 }
                 '\n' => {
                     self.incr_curr_pos();
                     self.line_loc += 1;
-                    let tok = self.get_tok();
-                    return tok;
+                    return self.get_tok();
                 }
 
                 _ => {
                    self.incr_curr_pos();
                    self.buff.push(a as u8);
-                   let tok = self.get_tok();
-                   return tok;
+                   return self.get_tok();
                 }
             }
         }
