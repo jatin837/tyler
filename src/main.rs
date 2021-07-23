@@ -124,40 +124,34 @@ pub mod scanner {
 
 
         pub fn get_tok(&mut self) -> Token {
-            // if scanner is at EOF
-            //
             if self.is_at_end() {
-                // if buffer is empty => scanner reached the end
-                //
                 if self.is_buff_empty(){
                     return Token::new(TokenType::EOF, self.line_loc, "".to_string(), "".to_string());
                 }
-                // else => return whatever in the buffer
-                //
                 else { 
                     return self.get_tok_from_buff();
                 }
             }
 
             let single_char_tok = hashmap!{
-              '('     =>     Token::new(TokenType::LEFT_PAREN, self.line_loc,"".to_string(), "".to_string()),
-              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,"".to_string(), "".to_string()),
-              '{'     =>     Token::new(TokenType::LEFT_BRACE, self.line_loc,"".to_string(), "".to_string()),
-              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,"".to_string(), "".to_string()),
-              ','     =>     Token::new(TokenType::COMMA, self.line_loc,"".to_string(), "".to_string()),
-              '.'     =>     Token::new(TokenType::DOT, self.line_loc,"".to_string(), "".to_string()),
-              '-'     =>     Token::new(TokenType::MINUS, self.line_loc,"".to_string(), "".to_string()),
-              '+'     =>     Token::new(TokenType::PLUS, self.line_loc,"".to_string(), "".to_string()),
-              ';'     =>     Token::new(TokenType::SEMICOLON, self.line_loc,"".to_string(), "".to_string()),
-              '/'     =>     Token::new(TokenType::SLASH, self.line_loc,"".to_string(), "".to_string()),
-              '*'     =>     Token::new(TokenType::STAR, self.line_loc,"".to_string(), "".to_string()),
+              '('     =>     Token::new(TokenType::LEFT_PAREN,  self.line_loc,    "".to_string(),     "".to_string()),
+              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,    "".to_string(),     "".to_string()),
+              '{'     =>     Token::new(TokenType::LEFT_BRACE,  self.line_loc,    "".to_string(),     "".to_string()),
+              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,    "".to_string(),     "".to_string()),
+              ','     =>     Token::new(TokenType::COMMA,       self.line_loc,    "".to_string(),     "".to_string()),
+              '.'     =>     Token::new(TokenType::DOT,         self.line_loc,    "".to_string(),     "".to_string()),
+              '-'     =>     Token::new(TokenType::MINUS,       self.line_loc,    "".to_string(),     "".to_string()),
+              '+'     =>     Token::new(TokenType::PLUS,        self.line_loc,    "".to_string(),     "".to_string()),
+              ';'     =>     Token::new(TokenType::SEMICOLON,   self.line_loc,    "".to_string(),     "".to_string()),
+              '/'     =>     Token::new(TokenType::SLASH,       self.line_loc,    "".to_string(),     "".to_string()),
+              '*'     =>     Token::new(TokenType::STAR,        self.line_loc,    "".to_string(),     "".to_string()),
             };
 
             let potential_double_char_tok = hashmap!{
-              '!'     =>     Token::new(TokenType::BANG, self.line_loc,"".to_string(), "".to_string()),
-              '='     =>     Token::new(TokenType::EQUAL, self.line_loc,"".to_string(), "".to_string()),
-              '>'     =>     Token::new(TokenType::GREATER, self.line_loc,"".to_string(), "".to_string()),
-              '<'     =>     Token::new(TokenType::LESS, self.line_loc,"".to_string(), "".to_string()),
+              '!'     =>     Token::new(TokenType::BANG,        self.line_loc,    "".to_string(),     "".to_string()),
+              '='     =>     Token::new(TokenType::EQUAL,       self.line_loc,    "".to_string(),     "".to_string()),
+              '>'     =>     Token::new(TokenType::GREATER,     self.line_loc,    "".to_string(),     "".to_string()),
+              '<'     =>     Token::new(TokenType::LESS,        self.line_loc,    "".to_string(),     "".to_string()),
             };
 
             let a = self.source[self.curr_pos] as char;
