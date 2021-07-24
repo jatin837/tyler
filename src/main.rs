@@ -135,24 +135,13 @@ pub mod scanner {
 
         pub fn get_tok_from_buff(&mut self) -> Token {
             let temp = String::from_utf8(self.buff.clone()).unwrap();
-            let reserved_type = hashmap!{
-                "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
-                "and"   =>     Token::new(TokenType::AND,       self.line_loc,     "".to_string(),     "".to_string()),
-                "class" =>     Token::new(TokenType::CLASS,     self.line_loc,     "".to_string(),     "".to_string()),
-                "else"  =>     Token::new(TokenType::ELSE,      self.line_loc,     "".to_string(),     "".to_string()),
-                "false" =>     Token::new(TokenType::FALSE,     self.line_loc,     "".to_string(),     "".to_string()),
-                "fun"   =>     Token::new(TokenType::FUN,       self.line_loc,     "".to_string(),     "".to_string()),
-                "for"   =>     Token::new(TokenType::FOR,       self.line_loc,     "".to_string(),     "".to_string()),
-                "if"    =>     Token::new(TokenType::IF,        self.line_loc,     "".to_string(),     "".to_string()),
-                "nil"   =>     Token::new(TokenType::NIL,       self.line_loc,     "".to_string(),     "".to_string()),
-                "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
-                "ret"   =>     Token::new(TokenType::RETURN,    self.line_loc,     "".to_string(),     "".to_string()),
-                "super" =>     Token::new(TokenType::SUPER,     self.line_loc,     "".to_string(),     "".to_string()),
-                "this"  =>     Token::new(TokenType::THIS,      self.line_loc,     "".to_string(),     "".to_string()),
-                "true"  =>     Token::new(TokenType::TRUE,      self.line_loc,     "".to_string(),     "".to_string()),
-                "var"   =>     Token::new(TokenType::VAR,       self.line_loc,     "".to_string(),     "".to_string()),
-                "while" =>     Token::new(TokenType::WHILE,     self.line_loc,     "".to_string(),     "".to_string()),
-            };
+
+	    if self.reserved_type_tok.contains_key(&temp){
+		let tok_t = self.reserved_type_tok[&temp].clone();
+		self.buff.clear();
+		return Token::new(tok_t, self.line_loc, "".to_string(), "".to_string());
+	    }
+
             let tok = Token::new(TokenType::IDENTIFIER, self.line_loc, String::from_utf8(self.buff.clone()).unwrap(), "".to_string());
             self.buff.clear();
             tok
