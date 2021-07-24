@@ -169,42 +169,22 @@ pub mod scanner {
                 }
             }
 
-            let single_char_tok = hashmap!{
-              '('     =>     Token::new(TokenType::LEFT_PAREN,  self.line_loc,    "".to_string(),     "".to_string()),
-              ')'     =>     Token::new(TokenType::RIGHT_PAREN, self.line_loc,    "".to_string(),     "".to_string()),
-              '{'     =>     Token::new(TokenType::LEFT_BRACE,  self.line_loc,    "".to_string(),     "".to_string()),
-              '}'     =>     Token::new(TokenType::RIGHT_BRACE, self.line_loc,    "".to_string(),     "".to_string()),
-              ','     =>     Token::new(TokenType::COMMA,       self.line_loc,    "".to_string(),     "".to_string()),
-              '.'     =>     Token::new(TokenType::DOT,         self.line_loc,    "".to_string(),     "".to_string()),
-              '-'     =>     Token::new(TokenType::MINUS,       self.line_loc,    "".to_string(),     "".to_string()),
-              '+'     =>     Token::new(TokenType::PLUS,        self.line_loc,    "".to_string(),     "".to_string()),
-              ';'     =>     Token::new(TokenType::SEMICOLON,   self.line_loc,    "".to_string(),     "".to_string()),
-              '/'     =>     Token::new(TokenType::SLASH,       self.line_loc,    "".to_string(),     "".to_string()),
-              '*'     =>     Token::new(TokenType::STAR,        self.line_loc,    "".to_string(),     "".to_string()),
-            };
-
-            let potential_double_char_tok = hashmap!{
-              '!'     =>     Token::new(TokenType::BANG,        self.line_loc,    "".to_string(),     "".to_string()),
-              '='     =>     Token::new(TokenType::EQUAL,       self.line_loc,    "".to_string(),     "".to_string()),
-              '>'     =>     Token::new(TokenType::GREATER,     self.line_loc,    "".to_string(),     "".to_string()),
-              '<'     =>     Token::new(TokenType::LESS,        self.line_loc,    "".to_string(),     "".to_string()),
-            };
-
             let a = self.source[self.curr_pos] as char;
-            if single_char_tok.contains_key(&a){
-               if self.buff.len() > 0 {
+
+            if self.single_char_type_tok.contains_key(&a){
+               if !self.is_buff_empty() {
                    let tok = self.get_tok_from_buff();
                    return tok;
                }
                else {
                    self.incr_curr_pos();
-                   let tok = single_char_tok[&a].clone();
-                   return tok;
+                   let tok_t = self.single_char_type_tok[&a].clone();
+                   return Token::new(tok_t, self.curr_pos, "".to_string(), "".to_string());
                }
             }
 
-            if potential_double_char_tok.contains_key(&a){
-                match a {
+            if self.potential_double_char_tok.contains_key(&a){
+		match a {
                     '!'    =>    {
                         self.incr_curr_pos();
                         if self.source[self.curr_pos] == '=' as u8 {
