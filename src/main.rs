@@ -78,6 +78,7 @@ pub mod scanner {
                 line_loc : 1,
                 reserved_type_tok : hashmap!{
                     "or"   .to_string()  =>  TokenType::OR,
+		    "log"  .to_string()  =>  TokenType::LOG,
                     "and"  .to_string()  =>  TokenType::AND,
                     "class".to_string()  =>  TokenType::CLASS,
                     "else" .to_string()  =>  TokenType::ELSE,
@@ -87,7 +88,6 @@ pub mod scanner {
                     "if"   .to_string()  =>  TokenType::IF,
                     "nil"  .to_string()  =>  TokenType::NIL,
                     "or"   .to_string()  =>  TokenType::OR,
-                    "print".to_string()  =>  TokenType::PRINT,
                     "ret"  .to_string()  =>  TokenType::RETURN,
                     "super".to_string()  =>  TokenType::SUPER,
                     "this" .to_string()  =>  TokenType::THIS,
@@ -135,7 +135,6 @@ pub mod scanner {
 
         pub fn get_tok_from_buff(&mut self) -> Token {
             let temp = String::from_utf8(self.buff.clone()).unwrap();
-            
             let reserved_type = hashmap!{
                 "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
                 "and"   =>     Token::new(TokenType::AND,       self.line_loc,     "".to_string(),     "".to_string()),
@@ -147,7 +146,6 @@ pub mod scanner {
                 "if"    =>     Token::new(TokenType::IF,        self.line_loc,     "".to_string(),     "".to_string()),
                 "nil"   =>     Token::new(TokenType::NIL,       self.line_loc,     "".to_string(),     "".to_string()),
                 "or"    =>     Token::new(TokenType::OR,        self.line_loc,     "".to_string(),     "".to_string()),
-                "print" =>     Token::new(TokenType::PRINT,     self.line_loc,     "".to_string(),     "".to_string()),
                 "ret"   =>     Token::new(TokenType::RETURN,    self.line_loc,     "".to_string(),     "".to_string()),
                 "super" =>     Token::new(TokenType::SUPER,     self.line_loc,     "".to_string(),     "".to_string()),
                 "this"  =>     Token::new(TokenType::THIS,      self.line_loc,     "".to_string(),     "".to_string()),
@@ -335,7 +333,7 @@ pub mod token {
         IF,
         NIL,
         OR,
-        PRINT,
+        LOG,
         RETURN,
         SUPER,
         THIS,
